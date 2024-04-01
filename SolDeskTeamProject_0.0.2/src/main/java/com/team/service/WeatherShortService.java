@@ -4,6 +4,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.gson.Gson;
 import com.team.dto.shortwthr.ShortWeather;
 import com.team.mapper.WeatherMapper;
 
@@ -28,7 +31,7 @@ public class WeatherShortService {
 	
 	private final String API_KEY = "fpqEuKWzMPUU0PhKfNijGVZnZjweMezdxekVC6Y71Yb3Ki1h1WzMmnLZnqDioAGcwkbtEcRBa36OJrG6TABKHg%3D%3D";
 	private final String SHORT_DALY_INFO_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/";
-	
+
 	// 단기예보 조회 api
 	public String ShortWeatherInfoApi(String area ) {
 		String nx = shortWeatherArea(area).get(0);
@@ -49,12 +52,28 @@ public class WeatherShortService {
 			e.printStackTrace();
 		}
 		ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
-        return response.getBody();
+		return response.getBody();
 	}
 	
-	
+	public String shortWeatherNum(String area) {
+		 // ShortWeatherInfoApi 메소드 호출하여 데이터 가져오기
+	    String shortWeatherInfo = ShortWeatherInfoApi(area);
+	    // JSON 파싱
+	    JSONObject jsonObject = new JSONObject(shortWeatherInfo);
+	    // 필요한 정보를 담을 배열 생성
+	    String[] shortWeatherData = new String[12];
+	    JSONArray items = jsonObject.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item");
+	    for (int i = 0; i < 12; i++) {
+	        JSONObject item = items.getJSONObject(i);
+	        // 필요한 정보 추출하여 배열에 저장
+	        String fcstValue = item.getString("fcstValue");
+	        shortWeatherData[i] = fcstValue;
+	    }
+	    System.out.println(shortWeatherData);
+	    return String.join(", ", shortWeatherData);
+	}
 	// 컨트롤러로 이동 후 구현하는 로직
-	public ShortWeather shortWeatherRun(String area ) {
+	public ShortWeather shortWeatherRun(String area) {
 		ShortWeather response = new ShortWeather();
 		String jsonData = ShortWeatherInfoApi(area);
 		try {

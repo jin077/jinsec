@@ -18,6 +18,7 @@
 	rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</script>
 </head>
 <body>
 	<div class=whole>
@@ -65,15 +66,30 @@
 								id="search" onclick="getWeather()">
 								<span>실행</span>
 							</button>
-							<c:forEach var="shorts" begin="0" end="12" items="${shortweather.response.body.items.item}">
-							${shorts.category}
-							${shorts.fcstValue}
-							<c:if test="${shorts eq 'TMP'}">
-								1시간 기온
-							</c:if>
-							</c:forEach>
+							<div id="weatherDataContainer"></div>
+							<div id="a"></div>
+    <script>
+        // shortWeatherData 배열 선언
+        var shortWeatherData1 = [
+            <c:forEach var="shorts" begin="0" end="11" items="${shortweather.response.body.items.item}">
+                "${shorts.fcstValue}",
+            </c:forEach>
+        ];
+        var shortWeatherData2 = [
+            <c:forEach var="shorts" begin="12" end="23" items="${shortweather.response.body.items.item}">
+                "${shorts.fcstValue}",
+            </c:forEach>
+        ];
+        var shortWeatherData3 = [
+            <c:forEach var="shorts" begin="24" end="35" items="${shortweather.response.body.items.item}">
+                "${shorts.fcstValue}",
+            </c:forEach>
+        ];
+        var combinedShortWeatherData = [].concat(shortWeatherData1, shortWeatherData2, shortWeatherData3);
+        var firstElement = combinedShortWeatherData[1];
+        document.getElementById('a').innerText = firstElement;
+    </script>
 						</div>
-						
 						<button class="location-button" type="button">현위치</button>
 					</div>
 				</div>
