@@ -1,12 +1,13 @@
 package com.team.service;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team.dto.shortwthr.Item;
 import com.team.dto.shortwthr.ShortWeather;
 import com.team.mapper.WeatherMapper;
 
@@ -54,35 +58,79 @@ public class WeatherShortService {
 		ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
 		return response.getBody();
 	}
-	
-	public String shortWeatherNum(String area) {
-		 // ShortWeatherInfoApi 메소드 호출하여 데이터 가져오기
+	//insert문
+	public void shortWeatherInsert(String area) {
 	    String shortWeatherInfo = ShortWeatherInfoApi(area);
-	    // JSON 파싱
 	    JSONObject jsonObject = new JSONObject(shortWeatherInfo);
-	    // 필요한 정보를 담을 배열 생성
-	    String[] shortWeatherData = new String[12];
 	    JSONArray items = jsonObject.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item");
-	    for (int i = 0; i < 12; i++) {
-	        JSONObject item = items.getJSONObject(i);
-	        // 필요한 정보 추출하여 배열에 저장
-	        String fcstValue = item.getString("fcstValue");
-	        shortWeatherData[i] = fcstValue;
+	    //Json 데이터 파싱 [직렬화] 
+	    ObjectMapper mapper = new ObjectMapper();
+	    for (int i = 0; i < items.length(); i++) {
+	        JSONObject itemJson = items.getJSONObject(i);
+	        Item weatherData = null;
+			try {
+				weatherData = mapper.readValue(itemJson.toString(), Item.class);
+			} catch (JsonParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			Item weatherEntity = new Item();
+	        weatherEntity.setBaseDate(weatherData.getBaseDate());
+	        weatherEntity.setBaseTime(weatherData.getBaseTime());
+	        weatherEntity.setCategory(weatherData.getCategory());
+	        weatherEntity.setFcstDate(weatherData.getFcstDate());
+	        weatherEntity.setFcstTime(weatherData.getFcstTime());
+	        weatherEntity.setFcstValue(weatherData.getFcstValue());
+	        weatherEntity.setNx(weatherData.getNx());
+	        weatherEntity.setNy(weatherData.getNy());
+	        weatherEntity.setArea(area);
+	        System.out.println("[확인]  : " +weatherEntity);
+
+	        weatherMapper.weatherInsert(weatherEntity); // 등록성공
 	    }
-	    System.out.println(shortWeatherData);
-	    return String.join(", ", shortWeatherData);
 	}
+	//Json 데이터 가져오기
+	public List<Item> weatherList(String area){
+		List<Item> list=weatherMapper.weatherList(area);
+		return list; // JSON 데이터 형식으로 변환(API)해서 리턴(응답)하겠다.
+	}
+	
+	public List<Item> nowWeatherList(String area){
+		String fcstDate = time.nowDate();
+	    String fcstTime = time.nowTimes();
+	    List<Item> list = weatherMapper.nowWeatherList(area, fcstDate, fcstTime);
+		return list; // JSON 데이터 형식으로 변환(API)해서 리턴(응답)하겠다.
+	}	 
+	
 	// 컨트롤러로 이동 후 구현하는 로직
-	public ShortWeather shortWeatherRun(String area) {
+	public List<Item> shortWeatherRun(String area) {
+		//JOSN
 		ShortWeather response = new ShortWeather();
+		
+		//DB insert
 		String jsonData = ShortWeatherInfoApi(area);
+		
+		//너가 해야할것 TODO
+		//DB로부터updated =0 인 데이터 가져와서 뿌려주기
+		
+//		shortWeatherInsert(area);
+		
+		List<Item> list =nowWeatherList(area);
+		
 		try {
 			response = time.objectMapper.readValue(jsonData,ShortWeather.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return response;
+		return list;
 	}
 	
 	// 파라미터 값 변환 로직

@@ -17,5 +17,6 @@ public class Item{
     public int nx;
     public int ny;
     public int updated;
+    public String area;
 }
 

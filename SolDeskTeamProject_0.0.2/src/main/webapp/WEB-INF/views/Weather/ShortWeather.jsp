@@ -68,27 +68,7 @@
 							</button>
 							<div id="weatherDataContainer"></div>
 							<div id="a"></div>
-    <script>
-        // shortWeatherData 배열 선언
-        var shortWeatherData1 = [
-            <c:forEach var="shorts" begin="0" end="11" items="${shortweather.response.body.items.item}">
-                "${shorts.fcstValue}",
-            </c:forEach>
-        ];
-        var shortWeatherData2 = [
-            <c:forEach var="shorts" begin="12" end="23" items="${shortweather.response.body.items.item}">
-                "${shorts.fcstValue}",
-            </c:forEach>
-        ];
-        var shortWeatherData3 = [
-            <c:forEach var="shorts" begin="24" end="35" items="${shortweather.response.body.items.item}">
-                "${shorts.fcstValue}",
-            </c:forEach>
-        ];
-        var combinedShortWeatherData = [].concat(shortWeatherData1, shortWeatherData2, shortWeatherData3);
-        var firstElement = combinedShortWeatherData[1];
-        document.getElementById('a').innerText = firstElement;
-    </script>
+   								${shortweather}
 						</div>
 						<button class="location-button" type="button">현위치</button>
 					</div>

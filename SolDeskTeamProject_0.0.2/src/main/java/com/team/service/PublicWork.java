@@ -49,4 +49,11 @@ public class PublicWork {
 	        String nowDate = today.format(formatter);
 	        return nowDate;
 	   }
+
+	 public String nowTimes() {
+		 LocalTime now = LocalTime.now();
+		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
+		 String nowTimes = now.format(formatter);
+		 return nowTimes;
+	 }
 }
