@@ -51,9 +51,13 @@ public class PublicWork {
 	   }
 
 	 public String nowTimes() {
-		 LocalTime now = LocalTime.now();
-		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
-		 String nowTimes = now.format(formatter);
-		 return nowTimes;
+		    LocalTime now = LocalTime.now();
+		    int minute = now.getMinute();
+		    if (minute <= 59) {
+		        minute = 00;
+		    }
+		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
+		    String nowTimes = now.withMinute(minute).format(formatter);
+		    return nowTimes;
 	 }
 }

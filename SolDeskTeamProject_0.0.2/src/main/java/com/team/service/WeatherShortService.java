@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -101,28 +103,61 @@ public class WeatherShortService {
 		List<Item> list=weatherMapper.weatherList(area);
 		return list; // JSON 데이터 형식으로 변환(API)해서 리턴(응답)하겠다.
 	}
+
+	//category 가져오기
+	public List<String> getCategoryList(String area) {
+	    List<Item> list = weatherMapper.weatherList(area);
+	    List<String> categoryList = new ArrayList<>();
+
+	    for (Item item : list) {
+	        categoryList.add(item.getCategory());
+	    }
+	    System.out.println("확인 :" + categoryList);
+
+	    return categoryList;
+	}
 	
+	//baseTime 가져오기
+	
+	//fcstValue 가져오기
+	
+	
+	//현재 시간 기준 데이터 가져오기
 	public List<Item> nowWeatherList(String area){
-		String fcstDate = time.nowDate();
-	    String fcstTime = time.nowTimes();
-	    List<Item> list = weatherMapper.nowWeatherList(area, fcstDate, fcstTime);
-		return list; // JSON 데이터 형식으로 변환(API)해서 리턴(응답)하겠다.
-	}	 
+	      Map<String, Object> map = new LinkedHashMap<String, Object>();
+
+	      String fcstDate = time.nowDate();
+	       String fcstTime = time.nowTimes();
+	      
+	      map.put("area", area);
+	      map.put("fcstDate", fcstDate);
+	      map.put("fcstTime", fcstTime);
+
+	       List<Item> list = weatherMapper.nowWeatherList(map);
+	       System.out.println("확인 :" + list);
+	      return list; // JSON 데이터 형식으로 변환(API)해서 리턴(응답)하겠다.
+	   }
 	
 	// 컨트롤러로 이동 후 구현하는 로직
-	public List<Item> shortWeatherRun(String area) {
+	public List<String> shortWeatherRun(String area) {
 		//JOSN
 		ShortWeather response = new ShortWeather();
 		
-		//DB insert
 		String jsonData = ShortWeatherInfoApi(area);
 		
 		//너가 해야할것 TODO
 		//DB로부터updated =0 인 데이터 가져와서 뿌려주기
 		
+		//DB insert
 //		shortWeatherInsert(area);
+
+		//현재 시간 기준 데이터 가져오는 코드
+//		List<Item> list =nowWeatherList(area);
 		
-		List<Item> list =nowWeatherList(area);
+		//list 가져오기
+//		List<Item> list =weatherList(area);
+
+		List<String> list =getCategoryList(area);
 		
 		try {
 			response = time.objectMapper.readValue(jsonData,ShortWeather.class);

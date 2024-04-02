@@ -11,9 +11,9 @@
 	  and area=#{area} and updated = 0
   </select>
   
-   <select id="nowWeatherList" parameterType="com.team.dto.shortwthr.Item" resultType="com.team.dto.shortwthr.Item">
-	  select * from shortweather where fcstDate=#{fcstDate} and fcstTime=#{fcstTime} 
-	  and area=#{area} and updated = 0
+   <select id="nowWeatherList" parameterType="hashmap" resultType="com.team.dto.shortwthr.Item">
+     select * from shortweather where fcstDate=#{fcstDate} and fcstTime=#{fcstTime} 
+     and area=#{area} and updated = 0
   </select>
   
 
