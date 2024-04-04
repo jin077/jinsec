@@ -14,7 +14,7 @@
 <h1>
 <a href="Weather/Main?area=서울">메인홈페이지 테스트</a>
 <a href="Weather/MediumWeather?area=서울">중기예보페이지 테스트</a>
-<a href="Weather/ShortWeather?area=서울">단기예보 페이지</a>
+<a href="Weather/ShortWeather">단기예보 페이지</a>
 </h1>
 <P>  The time on the server is ${serverTime}. </P>
 </body>

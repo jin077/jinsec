@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -47,9 +48,17 @@ public class BoardContorller {
 	
 	//단기 컨트론러
 	@GetMapping("/ShortWeather")
-	public void Shrot(@RequestParam("area") String area, Model model) {
-		System.out.println("미디움테스트");
-		model.addAttribute("shortweather",shortService.shortWeatherRun(area));
+	public void Short() {
+//		System.out.println("미디움테스트");
+//		model.addAttribute("shortweather",shortService.shortWeatherRun());
 	}
+	//단기 검색어
 	
+	//단기 삽입 
+	@PostMapping("/NewInsert")
+	public void newInsert() {
+		System.out.println("단기불러오기");
+		shortService.shortWeatherRun();
+//		model.addAttribute("shortInsert",shortService.shortWeatherRun());
+	}
 }
