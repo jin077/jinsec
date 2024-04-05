@@ -9,7 +9,7 @@ import lombok.Data;
 public class Item{
 	public int seq;
     public String baseDate;
-    public String baseTime;
+//    public String baseTime;
     public String category;
     public String fcstDate;
     public String fcstTime;

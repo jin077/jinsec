@@ -11,13 +11,17 @@ import com.team.dto.shortwthr.Item;
 public interface WeatherMapper {
 	public void weatherInsert(Item weatherEntiy);
 	
+	//전체 리스트 가져오기 
 	public List<Item> weatherList(String area);
 
 //	public List<Item> nowWeatherList(String area ,String fcstDate, String fcstTime);
 
-
+	//현재 리스트 가져오기
 	public List<Item> nowWeatherList(Map<String, Object> map);
 	
+	//검색어 리스트 가져오기
 	public List<Item> searchWeather(String area);
+	
+	//현재 검색어 리스트 가져오기
 	
 }

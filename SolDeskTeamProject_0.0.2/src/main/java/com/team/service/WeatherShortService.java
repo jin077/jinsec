@@ -24,7 +24,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.dto.shortwthr.Item;
-import com.team.dto.shortwthr.ShortWeather;
 import com.team.mapper.WeatherMapper;
 
 
@@ -79,7 +78,7 @@ public class WeatherShortService {
 			
 	        ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
 	        String weatherInfo = response.getBody(); // 날씨 정보 가져오기
-	        System.out.println("확인2"+weatherInfo);
+//	        System.out.println("확인2"+weatherInfo);
 	        shortWeatherInsert(weatherInfo ,area);
 //	        weatherInfoList.add(weatherInfo); // 리스트에 추가
         }
@@ -109,7 +108,7 @@ public class WeatherShortService {
 //			System.out.println(weatherData);
 			Item weatherEntity = new Item();
 	        weatherEntity.setBaseDate(weatherData.getBaseDate());
-	        weatherEntity.setBaseTime(weatherData.getBaseTime());
+//	        weatherEntity.setBaseTime(weatherData.getBaseTime());
 	        weatherEntity.setCategory(weatherData.getCategory());
 	        weatherEntity.setFcstDate(weatherData.getFcstDate());
 	        weatherEntity.setFcstTime(weatherData.getFcstTime());
@@ -151,20 +150,18 @@ public class WeatherShortService {
 	
 	//fcstValue 가져오기
 	
-	
 	//현재 시간 기준 데이터 가져오기
-	public List<Item> nowWeatherList(String area){
+	public List<Item> nowWeatherList(){
 	      Map<String, Object> map = new LinkedHashMap<String, Object>();
-
+	      String area="서울";
 	      String fcstDate = time.nowDate();
 	       String fcstTime = time.nowTimes();
-	      
 	      map.put("area", area);
 	      map.put("fcstDate", fcstDate);
 	      map.put("fcstTime", fcstTime);
 
 	       List<Item> list = weatherMapper.nowWeatherList(map);
-	       System.out.println("확인 :" + list);
+//	       System.out.println("확인 :" + list);
 	      return list; // JSON 데이터 형식으로 변환(API)해서 리턴(응답)하겠다.
 	   }
 	
@@ -173,7 +170,8 @@ public class WeatherShortService {
 		List<Item> list=weatherMapper.searchWeather(area);
 		return list; // JSON 데이터 형식으로 변환(API)해서 리턴(응답)하겠다.
 	}
-	// 컨트롤러로 이동 후 구현하는 로직
+
+// 컨트롤러로 이동 후 구현하는 로직
 //	public ShortWeather shortWeatherRun() {
 //		//JOSN
 //		ShortWeather response = new ShortWeather();

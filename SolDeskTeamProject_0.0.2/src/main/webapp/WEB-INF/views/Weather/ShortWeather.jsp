@@ -303,8 +303,22 @@
              <button type="submit" class="btn btn-primary" value="검색">검색</button>
         </form>
         <c:forEach var="search" items="${shortweather}">
-					${search.category}
 		</c:forEach>
+		
+		<c:forEach var="weather" items="${nowWeather}">
+			${weather.get(0).category}		
+		</c:forEach>
+		
+		현재 지역 : 
+		현재 기온 :
+		현재 날씨 :
+		현재 습도 : 
+		현재 시간 :
+		현재 강수량 :
+
+<!--  데이터들을 가지고 와서 foreach문으로 뿌려주기 -->
+
+
         <div class="flex items-center justify-between">
           <div class="w-full h-48 bg-gray-200 rounded-lg"></div>
           <div class="w-full h-48 bg-gray-200 rounded-lg"></div>

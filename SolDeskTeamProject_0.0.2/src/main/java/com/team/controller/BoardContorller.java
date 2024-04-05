@@ -46,19 +46,20 @@ public class BoardContorller {
 		model.addAttribute("weather",mediumService.mediumWeatherRun(area));
 	}
 	
-	//단기 컨트론러
+	//단기 컨트롤러 & 현재 데이터 불러오기 
 	@GetMapping("/ShortWeather")
-	public void Short() {
-//		System.out.println("미디움테스트");
-//		model.addAttribute("shortweather",shortService.shortWeatherRun());
+	public void Short(Model model) {
+		System.out.println("실기간 테스트");
+		model.addAttribute("nowWeather",shortService.nowWeatherList());
+		System.out.println(shortService.nowWeatherList());
 	}
-	//단기 검색어
+	//단기 검색어 & 현재 시간데이터들을 가져오기 
 	@PostMapping("/searchWeather")
-	public void searchWeather(String area, Model model) {
+	public String searchWeather(String area, Model model) {
 		System.out.println("검색어 불러오기");
 		model.addAttribute("shortweather", shortService.searchWeather(area));
-		System.out.println(shortService.searchWeather(area));
-//		return "redirect:/Weather/ShortWeather";
+//		System.out.println(shortService.searchWeather(area));
+		return "Weather/ShortWeather";
 	}
 	//단기 삽입 
 	@PostMapping("/NewInsert")
@@ -68,4 +69,6 @@ public class BoardContorller {
 //		model.addAttribute("shortInsert",shortService.shortWeatherRun());
 		return "redirect:/Weather/ShortWeather";
 	}
+	
+	
 }
