@@ -11,6 +11,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="${cp}/resources/Home.css">
 <script type="text/javascript"
 	src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=cb3o2kyqsj"></script>
@@ -19,28 +21,6 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</script>
-      <script>
-      window.onload = function() {
-    	    // Get the table head
-    	    var tableHead = document.querySelector("thead > tr");
-
-    	    // Assume your data is stored in the 'list' variable
-    	    var list = ${shortweather}; // Your list data here
-
-    	    // Loop through each item in the list
-    	    list.forEach(function(item) {
-    	        // Create a new table header cell
-    	        var th = document.createElement("th");
-
-    	        // Set the content of the cell to the item from the list
-    	        th.textContent = item;
-
-    	        // Append the cell to the table head row
-    	        tableHead.appendChild(th);
-    	    });
-    	};
-      </script>
 </head>
 <body>
 <div class="main">
@@ -318,7 +298,13 @@
       	 <button type="submit" class="custom-btn btn-8"><span>New</span></button>
       	</div>
         </form>
-        
+        <form action="${cp}/Weather/searchWeather" method="post" class="home-serach-form">
+             <input type="text" value="지역을 검색하세요" id="area" name="area">
+             <button type="submit" class="btn btn-primary" value="검색">검색</button>
+        </form>
+        <c:forEach var="search" items="${shortweather}">
+					${search.category}
+		</c:forEach>
         <div class="flex items-center justify-between">
           <div class="w-full h-48 bg-gray-200 rounded-lg"></div>
           <div class="w-full h-48 bg-gray-200 rounded-lg"></div>

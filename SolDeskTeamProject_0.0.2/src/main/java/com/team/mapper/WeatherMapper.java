@@ -18,4 +18,6 @@ public interface WeatherMapper {
 
 	public List<Item> nowWeatherList(Map<String, Object> map);
 	
+	public List<Item> searchWeather(String area);
+	
 }
