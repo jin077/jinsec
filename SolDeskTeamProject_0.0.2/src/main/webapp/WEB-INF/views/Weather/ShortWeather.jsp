@@ -302,19 +302,77 @@
              <input type="text" value="지역을 검색하세요" id="area" name="area">
              <button type="submit" class="btn btn-primary" value="검색">검색</button>
         </form>
-        <c:forEach var="search" items="${shortweather}">
-		</c:forEach>
-		
-		<c:forEach var="weather" items="${nowWeather}">
-			${weather.get(0).category}		
-		</c:forEach>
-		
-		현재 지역 : 
-		현재 기온 :
-		현재 날씨 :
-		현재 습도 : 
-		현재 시간 :
-		현재 강수량 :
+     
+	   <table border="1" style="table-layout:fixed">
+    <thead>
+    </thead>
+    <tbody>
+    <tr>
+    	<td style="width:20 0">습도:</td>
+        <c:forEach var="item" items="${searchweather}">
+                <c:if test="${item.category eq 'REH'}">
+                   <td>${item.fcstValue}%</td>
+                </c:if>
+                <c:if test="${item.category eq 'SKY'}">
+                   <tr>${item.fcstValue}</tr>
+                </c:if>
+                <c:if test="${item.category eq 'POP'}">
+                   <tr>${item.fcstValue}</tr>
+                </c:if>
+                <c:if test="${item.category eq 'TMP'}">
+                   <tr>${item.fcstValue}</tr>
+                </c:if>
+                <c:if test="${item.category eq 'UUU'}">
+                   <tr>${item.fcstValue}</tr>
+                </c:if>
+                <c:if test="${item.category eq 'VEC'}">
+                   <tr>${item.fcstValue}</tr>
+                </c:if>
+                <c:if test="${item.category eq 'VVV'}">
+                   <tr>${item.fcstValue}</tr>
+                </c:if>
+                <c:if test="${item.category eq 'PCP'}">
+                   <tr>${item.fcstValue}</tr>
+                </c:if>
+                <!-- Add more conditions for other categories if needed -->
+        </c:forEach>
+    </tr>
+    </tbody>
+</table>
+
+       
+	
+	
+	
+	
+	
+	<!-- 현재 시간 정보 (서울) 메인에 박아둘 정보 -->	
+	<c:forEach var="value" items="${nowWeather}" varStatus="loop">
+	    <c:if test="${loop.index == 0}">
+	        현재 기온 : ${value}
+	    </c:if>
+	    <c:if test="${loop.index == 1}">
+	        현재 풍속(동서) : ${value}
+	    </c:if>
+	    <c:if test="${loop.index == 2}">
+	        현재 풍속(남북) : ${value}
+	    </c:if>
+	    <c:if test="${loop.index == 3}">
+	        현재 풍향 : ${value}
+	    </c:if>
+	    <c:if test="${loop.index == 4}">
+	        현재 상태 : ${value}
+	    </c:if>
+	    <c:if test="${loop.index == 5}">
+	        현재 강수확률 : ${value}
+	    </c:if>
+	    <c:if test="${loop.index == 6}">
+	        현재 강수량 : ${value}
+	    </c:if>
+	    <c:if test="${loop.index == 7}">
+	        현재 습도 : ${value}
+	    </c:if>
+	</c:forEach>
 
 <!--  데이터들을 가지고 와서 foreach문으로 뿌려주기 -->
 

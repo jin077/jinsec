@@ -20,7 +20,7 @@ public interface WeatherMapper {
 	public List<Item> nowWeatherList(Map<String, Object> map);
 	
 	//검색어 리스트 가져오기
-	public List<Item> searchWeather(String area);
+	public List<Item> searchWeather(Map<String, Object> map);
 	
 	//현재 검색어 리스트 가져오기
 	

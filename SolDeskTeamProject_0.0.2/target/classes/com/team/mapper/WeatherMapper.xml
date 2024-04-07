@@ -16,8 +16,8 @@
      and area=#{area} and updated = 0
   </select>
   
-  <select id="searchWeather" parameterType="String" resultType="com.team.dto.shortwthr.Item">
-     select * from shortweather where area=#{area}
+  <select id="searchWeather" parameterType="hashmap" resultType="com.team.dto.shortwthr.Item">
+     select * from shortweather where area=#{area} and category=#{category} 
   </select>
-
+	
 </mapper>

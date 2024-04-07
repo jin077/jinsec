@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -151,7 +152,7 @@ public class WeatherShortService {
 	//fcstValue 가져오기
 	
 	//현재 시간 기준 데이터 가져오기
-	public List<Item> nowWeatherList(){
+	public List<String> nowWeatherList(){
 	      Map<String, Object> map = new LinkedHashMap<String, Object>();
 	      String area="서울";
 	      String fcstDate = time.nowDate();
@@ -159,70 +160,46 @@ public class WeatherShortService {
 	      map.put("area", area);
 	      map.put("fcstDate", fcstDate);
 	      map.put("fcstTime", fcstTime);
-
+	      
 	       List<Item> list = weatherMapper.nowWeatherList(map);
 //	       System.out.println("확인 :" + list);
-	      return list; // JSON 데이터 형식으로 변환(API)해서 리턴(응답)하겠다.
+	       List<String> categoryList = list.stream()
+	    		    .filter(item -> {
+	    		        String category = item.getCategory();
+	    		        return category.equals("POP") || category.equals("PCP") || category.equals("REH") ||
+	    		               category.equals("TMP") || category.equals("UUU") || category.equals("VVV") ||
+	    		               category.equals("VEC") || category.equals("SKY");
+	    		    })
+	    		    .map(Item::getFcstValue)
+	    		    .collect(Collectors.toList());
+//	       System.out.println("지금 :" +categoryList);
+	       return categoryList; // JSON 데이터 형식으로 변환(API)해서 리턴(응답)하겠다.
 	   }
 	
-	//검섹어 구현
+	//검색어 구현 & 현재 데이터 가져오기 
 	public List<Item> searchWeather(String area){
-		List<Item> list=weatherMapper.searchWeather(area);
-		return list; // JSON 데이터 형식으로 변환(API)해서 리턴(응답)하겠다.
-	}
+		List<Item> resultList = new ArrayList<>();
+		
+		 List<String> categories = Arrays.asList("TMP", "UUU", "VVV", "VEC", "SKY", "POP", "PCP", "REH");
+		
+		
+		 for (String category : categories) {
+		        Map<String, Object> map = new LinkedHashMap<String, Object>();
+		        map.put("area", area);
+		        map.put("category", category);
+//		        map.put("fcstTime", fcstTime); // fcstTime 변수가 어디서 오는지 확인 필요
+		        
+		        // weatherMapper.searchWeather(area, category)를 호출하여 결과를 받아온다고 가정하고, resultList에 추가
+		        List<Item> list = weatherMapper.searchWeather(map);
+		        resultList.addAll(list);
+		        
+//		        System.out.println("확인하기 : " +list);
+		    }
+//		    System.out.println("확인 : " +resultList);
+		    // JSON 데이터 형식으로 변환(API)해서 리턴(응답)
+		    return resultList;
+		}
 
-// 컨트롤러로 이동 후 구현하는 로직
-//	public ShortWeather shortWeatherRun() {
-//		//JOSN
-//		ShortWeather response = new ShortWeather();
-//		
-//		ShortWeatherInfoApi();
-//		System.out.println(jsonData);
-//		
-//		List<String> jsonList = ShortWeatherInfoApi();
-//		ObjectMapper objectMapper = new ObjectMapper();
-//
-//		// 각 JSON 문자열을 순회하면서 Java 객체로 변환하여 리스트에 추가합니다.
-//		List<ShortWeather> shortWeatherList = new ArrayList<>();
-//		for (String jsonString : jsonList) {
-//		    ShortWeather shortWeather = null;
-//			try {
-//				shortWeather = objectMapper.readValue(jsonString, ShortWeather.class);
-//			} catch (JsonParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (JsonMappingException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		    shortWeatherList.add(shortWeather);
-//		}
-//	    너가 해야할것 TODO
-//		DB로부터updated =0 인 데이터 가져와서 뿌려주기
-//		
-//		DB insert
-//		shortWeatherInsert();
-//
-//		현재 시간 기준 데이터 가져오는 코드
-//		List<Item> list =nowWeatherList(area);
-//		
-//		list 가져오기
-//		List<Item> list =weatherList(area);
-//
-//		List<String> list =getCategoryList(area);
-//		
-//		try {
-////			response = time.objectMapper.readValue(jsonData,ShortWeather.class);
-//			response =null;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return response;
-//	}
-	
 	// 파라미터 값 변환 로직
 	public List<String> shortWeatherArea(String area) {
 //		만약 UTF-8 필요하면 사용해서 바꾸면 됩니다.

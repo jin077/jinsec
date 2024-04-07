@@ -46,22 +46,28 @@ public class BoardContorller {
 		model.addAttribute("weather",mediumService.mediumWeatherRun(area));
 	}
 	
-	//단기 컨트롤러 & 현재 데이터 불러오기 
+	//단기 컨트롤러 & 현재 데이터 불러오기 (완성)
 	@GetMapping("/ShortWeather")
 	public void Short(Model model) {
 		System.out.println("실기간 테스트");
 		model.addAttribute("nowWeather",shortService.nowWeatherList());
-		System.out.println(shortService.nowWeatherList());
+//		System.out.println("지금 2 : " + shortService.nowWeatherList());
 	}
 	//단기 검색어 & 현재 시간데이터들을 가져오기 
 	@PostMapping("/searchWeather")
-	public String searchWeather(String area, Model model) {
+	public String searchWeather(@RequestParam("area") String area, Model model) {
 		System.out.println("검색어 불러오기");
-		model.addAttribute("shortweather", shortService.searchWeather(area));
+		model.addAttribute("searchweather", shortService.searchWeather(area));
 //		System.out.println(shortService.searchWeather(area));
 		return "Weather/ShortWeather";
 	}
-	//단기 삽입 
+//	//단기 데이터 다 불러오기 
+//	@PostMapping("/ShortWeather")
+//	public void shortWeather(String area, Model model) {
+//		System.out.println("검색어 불러오기");
+//		model.addAttribute("shortWeather", shortService.weatherList(area));
+//	}
+	//단기 삽입 (완성)
 	@PostMapping("/NewInsert")
 	public String newInsert() {
 		System.out.println("단기불러오기");
