@@ -1,0 +1,1 @@
+ShortWeather.jsp 수정 
