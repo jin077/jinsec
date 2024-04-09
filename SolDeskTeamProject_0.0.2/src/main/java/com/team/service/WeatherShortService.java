@@ -3,6 +3,8 @@ package com.team.service;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -182,24 +184,58 @@ public class WeatherShortService {
 		
 		 List<String> categories = Arrays.asList("TMP", "UUU", "VVV", "VEC", "SKY", "POP", "PCP", "REH");
 		
+		 String currentTime = time.nowTimes();
 		
+		 for (int i = 0; i < 24; i++) {
+		        String targetTime = String.valueOf(Integer.parseInt(currentTime) + (i * 100)); // 현재 시간에서 i시간 뒤의 시간을 구함
+		        targetTime = String.format("%04d", Integer.parseInt(targetTime)); // 네 자리로 포맷팅
+		        
 		 for (String category : categories) {
 		        Map<String, Object> map = new LinkedHashMap<String, Object>();
 		        map.put("area", area);
 		        map.put("category", category);
-//		        map.put("fcstTime", fcstTime); // fcstTime 변수가 어디서 오는지 확인 필요
+		        map.put("fcstTime", targetTime); // fcstTime 변수가 어디서 오는지 확인 필요
 		        
 		        // weatherMapper.searchWeather(area, category)를 호출하여 결과를 받아온다고 가정하고, resultList에 추가
 		        List<Item> list = weatherMapper.searchWeather(map);
 		        resultList.addAll(list);
 		        
-//		        System.out.println("확인하기 : " +list);
 		    }
-//		    System.out.println("확인 : " +resultList);
-		    // JSON 데이터 형식으로 변환(API)해서 리턴(응답)
+			 }
 		    return resultList;
 		}
-
+	
+	//내일 날짜 24시간 데이터 불러오기 
+	public List<Item> searchTomorrowWeather(String area){
+	    List<Item> resultList = new ArrayList<>();
+	    
+	    List<String> categories = Arrays.asList("TMP", "UUU", "VVV", "VEC", "SKY", "POP", "PCP", "REH");
+	    
+	    String tomorrowDate = time.tomorrowDate();
+	    String fcstDate = String.format("%08d", Integer.parseInt(tomorrowDate)); // 여덟 자리로 포맷팅
+	    System.out.println("확인 : " + fcstDate);
+	    
+	    for (String category : categories) {
+	        Map<String, Object> map = new LinkedHashMap<String, Object>();
+	        map.put("area", area);
+	        map.put("category", category);
+	        map.put("fcstDate", fcstDate);
+	        
+	        List<Item> list = weatherMapper.searchWeather(map);
+	        for (Item item : list) {
+	            if (categories.contains(item.getCategory())) {
+	                resultList.add(item);
+	            }
+	        }
+	        
+	        System.out.println("확인하기 : " + list);
+	    }
+	    
+	    return resultList;
+	}
+	
+	
+	
 	public List<Item> searchNowWeather(String area){
 		List<Item> resultList = new ArrayList<>();
 		
@@ -207,6 +243,7 @@ public class WeatherShortService {
 		
 		String fcstTime = time.nowTimes();
 		
+		//현재 날짜 정보 불러오기 
 		for (String category : categories) {
 			Map<String, Object> map = new LinkedHashMap<String, Object>();
 			map.put("area", area);

@@ -58,8 +58,9 @@ public class BoardContorller {
 	public String searchWeather(@RequestParam("area") String area, Model model) {
 		System.out.println("검색어 불러오기");
 		model.addAttribute("searchweather", shortService.searchWeather(area));
+		model.addAttribute("searchTomorrowWeather", shortService.searchTomorrowWeather(area));
 		model.addAttribute("searchNowweather", shortService.searchNowWeather(area));
-		System.out.println(shortService.searchNowWeather(area));
+//		System.out.println(shortService.searchNowWeather(area));
 		return "Weather/ShortWeather";
 	}
 	//단기 삽입 (완성)

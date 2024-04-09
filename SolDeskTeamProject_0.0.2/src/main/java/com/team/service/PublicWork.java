@@ -49,6 +49,14 @@ public class PublicWork {
 	        String nowDate = today.format(formatter);
 	        return nowDate;
 	   }
+	 public String tomorrowDate() {
+		 LocalDate today = LocalDate.now();
+		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		 LocalDate tomorrow = today.plusDays(1);
+		 String tomorrowDate = tomorrow.format(formatter);
+		 return tomorrowDate;
+	 }
+	 
 
 	 public String nowTimes() {
 		    LocalTime now = LocalTime.now();
