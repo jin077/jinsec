@@ -23,6 +23,10 @@
 
 <!-- shortWeather css -->
 <link href="${cp}/resources/ShortWeather.css" rel="stylesheet" type="text/css" />
+
+<!-- chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<%@page import="java.util.Arrays" %>
 </head>
 
 <body>
@@ -105,47 +109,114 @@
     </div>
     <!-- 왼쪽 구역3 -->
     <div class="content_left_3">
+      <!-- 검색 박스 -->
     	<form action="${cp}/Weather/searchWeather" method="post" class="home-serach-form">
-			<input type="text" value="지역을 검색하세요" id="area" name="area">
-            <button type="submit" class="btn btn-primary" value="검색">검색</button>
-        </form>        
-       <table>
-        <!-- 표 머릿글 -->
-        <!-- <thead>
-        </thead> -->
-        <!-- 표 본문글 -->
-        <tbody>
-          <!-- 시간별로 반복 -->
-          <!-- 날짜 -->
-<%-- 		<c:forEach var="date" begin="0" end="23" step="1"> --%>
-		
-<!-- 		<!-- 시간 --> -->
-<%--           <c:forEach var="hour" begin="0" end="23" step="1"> --%>
-<%--           	<c:set var="formattedHour" value="${hour < 10 ? '0' + hour : hour}" /> --%>
-          	
-<!--             <tr> -->
-<%--               <td>${hour}시</td> --%>
-<!--               각 카테고리의 값 출력 -->
-<%--               <c:forEach var="item" items="${searchweather}"> --%>
-<!--                   현재 시간과 카테고리가 일치할 때만 값을 표시 -->
-<%--                   <c:if test="${item.fcstTime == formattedHour}"> --%>
-<%--                       <c:choose> --%>
-<%--                           <c:when test="${item.category eq 'TMP'}"> --%>
-<%--                               <td>${item.fcstValue}</td> --%>
-<%--                           </c:when> --%>
-<%--                           <c:when test="${item.category eq 'VEC'}"> --%>
-<%--                               <td>${item.fcstValue}</td> --%>
-<%--                           </c:when> --%>
-<%--                           <c:when test="${item.category eq 'PCP'}"> --%>
-<%--                               <td>${item.fcstValue}</td> --%>
-<%--                           </c:when> --%>
-<!--                           추가 카테고리에 대한 처리 -->
-<%--                       </c:choose> --%>
-<%--                   </c:if> --%>
-<%--               </c:forEach> --%>
-<!--             </tr> -->
-<%--           </c:forEach> --%>
-<%--         </c:forEach> --%>
+			  <input type="text" value="지역을 검색하세요" id="area" name="area">
+        <button type="submit" class="btn btn-primary" value="검색">검색</button>
+      </form>
+
+      <!-- 차트 -->
+      <div class="" style="width: 800px;">
+        <div class="" style="width: 800px; max-width: 600px; overflow-x: scroll; border-radius: 10px; border: solid 3px rgba(54, 162, 235, 1);">
+          <div class="lineChart" style="height: 400px">
+            <canvas id="temperatureChart"></canvas>    
+          </div>
+        </div>
+      </div>
+
+      <!-- TODO: 임시 -->
+      <%
+        // 기상청 API를 통해 현재 시간대의 기온 데이터를 가져온다고 가정
+        // 실제로는 해당 API에 맞게 요청 및 응답 처리 필요
+        double[] temperatureData = {20, 22, 23, 24, 25, 26, 24, 22, 21, 20, 22, 23, 24, 25, 26, 24, 22, 21,
+            20, 22, 23, 24, 25, 26, 24, 22, 21, 20, 22, 23, 24, 25, 26, 24, 22, 21}; // 예시 기온 데이터
+        double[] timeLabels = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 00, 01, 02,
+            03, 04, 05, 06, 07, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}; // 예시 시간 라벨
+        
+        String temperatureDataJson = Arrays.toString(temperatureData);
+        String timeLabelsJson = Arrays.toString(timeLabels);
+      %>
+      
+      <script>
+        var ctx = document.getElementById('temperatureChart').getContext('2d');
+        var temperatureData = <%= temperatureDataJson %>;
+        var timeLabels = <%= timeLabelsJson %>;
+
+        //config
+        const config = {
+                type: 'line',
+                data: {
+                    labels: timeLabels,
+                    datasets: [{
+                        label: 'Temperature (°C)',
+                        data: temperatureData,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                    	x: {
+                    		grid: {
+                    			color: 'transparent',
+                    		},
+                    	},
+                        y: {
+                        	grid: {
+                        		color: 'transparent',
+                        	},
+                        	beginAtZero:true,
+                        }
+                    }
+                }
+            }
+        
+        const myChart = new Chart(ctx, config);
+        
+        //x-scroll
+        const lineChart = document.querySelector('.lineChart');
+        const totalLabels = myChart.data.labels.length;
+        if (totalLabels > 12) {
+        	lineChart.style.width = '800px'
+          //const newWith = 800 + ((totalLabels - 12) * 30);
+       	  //lineChart.style.width = `${newWidth}px`;
+        }
+    	</script>
+
+
+      <!-- TODO: DB로부터 가져온 기온, 풍속 등 데이터 테이블 형태로 표시 -->
+      
+      <table>
+      <!-- 표 본문글 -->
+      <tbody>
+        <!-- 시간별로 반복 -->
+        <!-- 날짜 -->
+ 		    <!-- <c:forEach var="date" begin="0" end="23" step="1"> -->
+		    <!-- 시간 -->
+        <!-- <c:forEach var="hour" begin="0" end="23" step="1">
+          <c:set var="formattedHour" value="${hour < 10 ? '0' + hour : hour}" /> -->
+          <tr>
+            <!-- <td>${hour}시</td> -->
+              <!-- 각 카테고리의 값 출력 -->
+              <!-- <c:forEach var="item" items="${searchweather}"> -->
+              <!-- 현재 시간과 카테고리가 일치할 때만 값을 표시 -->
+                <!-- <c:if test="${item.fcstTime == formattedHour}">
+                  <c:choose>
+                    <c:when test="${item.category eq 'TMP'}">
+                      <td>${item.fcstValue}</td>
+                    </c:when>
+                    <c:when test="${item.category eq 'VEC'}">
+                      <td>${item.fcstValue}</td>
+                    </c:when>
+                    <c:when test="${item.category eq 'PCP'}">
+                      <td>${item.fcstValue}</td>
+                    </c:when>
+                  </c:choose>
+                </c:if>
+              </c:forEach>
+          </tr>
+        </c:forEach>
+        </c:forEach> -->
         </tbody>              
       </table>
     </div> 

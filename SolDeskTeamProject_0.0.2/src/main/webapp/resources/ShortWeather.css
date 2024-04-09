@@ -25,7 +25,7 @@
 /* 본문 부분 */
 
 .main {
-    background: gray;
+    /* background: gray; */
     margin: auto;
     display: grid;
     width: 99%;
@@ -36,7 +36,7 @@
     /* align-items:center; */
 }
 .content_left {
-    background: yellow;
+    /* background: yellow; */
     width: 100%;
     font-size: 40px;
 }
@@ -61,7 +61,7 @@
 .content_left_3 {
     text-align: center;
     margin: 10px;
-    background: green;
+    /* background: green; */
     min-height: 200px;
     border-bottom: 1px solid #d8d8d8;
 }
@@ -125,8 +125,16 @@
 
 
 .line_chart {
-    overflow-x: scroll;
+	width: 90%;
+	height: 400px;
+	text-align: center;
+	overflow: auto;
+	/* -ms-overflow-style: none; 인터넷 익스플로러 */
+	/* scrollbar-width: none; 파이어폭스 */
 }
+/* .line_chart::-webkit-scrollbar {
+    display: none; 크롬, 사파리, 오페라, 엣지
+} */
 
 ul {list-style: none;display: flex;}
 li {padding: 20px}
