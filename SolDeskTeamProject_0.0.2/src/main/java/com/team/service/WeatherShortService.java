@@ -158,12 +158,12 @@ public class WeatherShortService {
 	      Map<String, Object> map = new LinkedHashMap<String, Object>();
 	      String area="서울";
 	      String fcstDate = time.nowDate();
-	       String fcstTime = time.nowTimes();
+	      String fcstTime = time.nowTimes();
 	      map.put("area", area);
 	      map.put("fcstDate", fcstDate);
 	      map.put("fcstTime", fcstTime);
-	      
-	       List<Item> list = weatherMapper.nowWeatherList(map);
+
+		  List<Item> list = weatherMapper.nowWeatherList(map);
 //	       System.out.println("확인 :" + list);
 	       List<String> categoryList = list.stream()
 	    		    .filter(item -> {
