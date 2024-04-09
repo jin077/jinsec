@@ -20,4 +20,7 @@
      select * from shortweather where area=#{area} and category=#{category} 
   </select>
 	
+  <select id="searchNowWeather" parameterType="hashmap" resultType="com.team.dto.shortwthr.Item">
+     select * from shortweather where area=#{area} and category=#{category} and fcstTime=#{fcstTime}
+  </select>
 </mapper>

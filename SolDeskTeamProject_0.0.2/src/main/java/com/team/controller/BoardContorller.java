@@ -58,15 +58,10 @@ public class BoardContorller {
 	public String searchWeather(@RequestParam("area") String area, Model model) {
 		System.out.println("검색어 불러오기");
 		model.addAttribute("searchweather", shortService.searchWeather(area));
-//		System.out.println(shortService.searchWeather(area));
+		model.addAttribute("searchNowweather", shortService.searchNowWeather(area));
+		System.out.println(shortService.searchNowWeather(area));
 		return "Weather/ShortWeather";
 	}
-//	//단기 데이터 다 불러오기 
-//	@PostMapping("/ShortWeather")
-//	public void shortWeather(String area, Model model) {
-//		System.out.println("검색어 불러오기");
-//		model.addAttribute("shortWeather", shortService.weatherList(area));
-//	}
 	//단기 삽입 (완성)
 	@PostMapping("/NewInsert")
 	public String newInsert() {

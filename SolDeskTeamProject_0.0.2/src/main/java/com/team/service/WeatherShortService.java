@@ -200,6 +200,33 @@ public class WeatherShortService {
 		    return resultList;
 		}
 
+	public List<Item> searchNowWeather(String area){
+		List<Item> resultList = new ArrayList<>();
+		
+		List<String> categories = Arrays.asList("TMP", "UUU", "VVV", "VEC", "SKY", "POP", "PCP", "REH");
+		
+		String fcstTime = time.nowTimes();
+		
+		for (String category : categories) {
+			Map<String, Object> map = new LinkedHashMap<String, Object>();
+			map.put("area", area);
+			map.put("category", category);
+			map.put("fcstTime", fcstTime);
+//		        map.put("fcstTime", fcstTime); // fcstTime 변수가 어디서 오는지 확인 필요
+			
+			// weatherMapper.searchWeather(area, category)를 호출하여 결과를 받아온다고 가정하고, resultList에 추가
+			List<Item> list = weatherMapper.searchNowWeather(map);
+			resultList.addAll(list);
+			
+//		        System.out.println("확인하기 : " +list);
+		}
+//		    System.out.println("확인 : " +resultList);
+		// JSON 데이터 형식으로 변환(API)해서 리턴(응답)
+		return resultList;
+	}
+	
+	
+
 	// 파라미터 값 변환 로직
 	public List<String> shortWeatherArea(String area) {
 //		만약 UTF-8 필요하면 사용해서 바꾸면 됩니다.
