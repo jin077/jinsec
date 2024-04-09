@@ -93,6 +93,30 @@ function fetchData() {
         }
     });
 }
+
+$("#playButton").click(function(event) {
+    var satImgCFile = $('#satelliteImages').data("setss");
+    var urls = satImgCFile.split(",");
+    var currentIndex = 0;
+    var intervalId;
+
+    function updateImage() {
+        var trimmedUrl = urls[currentIndex].trim().replace(/\[|\]/g, '');
+        $('#response').attr('src', trimmedUrl);
+        currentIndex = (currentIndex + 1) % urls.length; // 다음 URL 인덱스로 이동
+    }
+
+    updateImage(); // 최초 실행
+
+    // 10초마다 이미지 URL 업데이트
+    intervalId = setInterval(updateImage, 1000);
+
+    // "멈춤" 버튼 클릭 시 setInterval 중지
+    $("#stopButton").click(function() {
+        clearInterval(intervalId);
+    });
+});
+
 <!--});-->
 </script>
 
