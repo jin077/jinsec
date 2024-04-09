@@ -93,23 +93,6 @@ function fetchData() {
         }
     });
 }
-//showImage 함수 정의
-function showImage(index, items, container) {
-    // 선택한 이미지의 URL을 가져옵니다.
-    var imageUrl = items[index].textContent;
-
-    // 이미지를 생성하거나 이미 있는 이미지를 가져옵니다.
-    var imgElement = container.querySelector('img');
-
-    // 이미지가 없는 경우 새로운 이미지를 생성합니다.
-    if (!imgElement) {
-        imgElement = document.createElement("img");
-        container.appendChild(imgElement);
-    }
-
-    // 이미지의 src 속성을 변경하여 이미지를 업데이트합니다.
-    imgElement.src = imageUrl;
-}
 <!--});-->
 </script>
 
@@ -397,8 +380,10 @@ function showImage(index, items, container) {
              <input type="text" value="지역을 검색하세요" id="area" name="area">
              <button type="submit" class="btn btn-primary" value="검색">검색</button>
         </form>
-     <button onclick="fetchData()">Load Images</button>
-		<div id="satellight"></div>
+     	<button onclick="fetchData()">Load Images</button>
+	<div>
+    	<img id="satellight" style="width: 100%; height: auto;">
+	</div>
 	  
 	   <table border="1" style="table-layout:fixed">
     <thead>
