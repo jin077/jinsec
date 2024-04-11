@@ -25,18 +25,12 @@
 <!-- shortWeather css -->
 <link href="${cp}/resources/ShortWeather.css" rel="stylesheet" type="text/css" />
 
-<<<<<<< HEAD:SolDeskTeamProject_0.0.13/src/main/webapp/WEB-INF/views/Weather/ShortWeather.jsp
 <!-- shortWeather css -->
 <link href="${cp}/resources/ShortWeather.css" rel="stylesheet" type="text/css" />
 
 <!-- chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-=======
-<!-- chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<%@page import="java.util.Arrays" %>
->>>>>>> 36a5f7ef25ef0e5498a60071d1c322f9de694a97:SolDeskTeamProject_0.0.2/src/main/webapp/WEB-INF/views/Weather/ShortWeather.jsp
 </head>
 
 <body>
@@ -107,6 +101,48 @@
         viewBox="0 0 512 512"
       >
       <path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg>
+	 </div>
+	 <div class="content-left-1.5">
+	<div id="content-left-1.5-left">
+		<!-- 현재 시간 정보 (서울) 메인에 박아둘 정보 -->	
+		<c:forEach var="value" items="${nowWeather}" varStatus="loop">
+		    <c:if test="${loop.index == 0}">
+		        ${value}°
+		    </c:if>
+		    <c:if test="${loop.index == 4}">
+		        ${value}
+		    </c:if>
+		</c:forEach>
+	</div>   
+    <div id="content-left-1-right">
+    	<div>
+    	<c:forEach var="value" items="${nowWeather}" varStatus="loop">
+		    <c:if test="${loop.index == 1}">
+		       현재 풍속(동서) ${value}
+		    </c:if>
+		    <c:if test="${loop.index == 2}">
+		       현재 풍속(남북) ${value}
+		    </c:if>
+		    <c:if test="${loop.index == 3}">
+		       현재 풍향 ${value}
+		    </c:if>
+		</c:forEach>
+    	</div>
+    	
+    	<div>
+    	<c:forEach var="value" items="${nowWeather}" varStatus="loop">
+		    <c:if test="${loop.index == 5}">
+		       강수 확률 ${value}%
+		    </c:if>
+			<c:if test="${loop.index == 6}">
+		       강수량 ${value}
+		    </c:if>		
+			<c:if test="${loop.index == 7}">
+		       습도 ${value}%
+		    </c:if>
+		</c:forEach>
+    </div>
+    </div>
     </div>
     <!-- 왼쪽 구역2 -->
     <div class="content_left_2">
@@ -119,9 +155,7 @@
     </div>
     <!-- 왼쪽 구역3 -->
     <div class="content_left_3">
-      <!-- 검색 박스 -->
     	<form action="${cp}/Weather/searchWeather" method="post" class="home-serach-form">
-<<<<<<< HEAD:SolDeskTeamProject_0.0.13/src/main/webapp/WEB-INF/views/Weather/ShortWeather.jsp
 			<input type="text" value="지역을 검색하세요" id="area" name="area">
             <button type="submit" class="btn btn-primary" value="검색">검색</button>
         </form>
@@ -191,116 +225,6 @@
 <!--         </tbody>               -->
 <!--       </table> -->
 
-=======
-			  <input type="text" value="지역을 검색하세요" id="area" name="area">
-        <button type="submit" class="btn btn-primary" value="검색">검색</button>
-      </form>
-
-      <!-- 차트 -->
-      <div class="" style="width: 800px;">
-        <div class="" style="width: 800px; max-width: 600px; overflow-x: scroll; border-radius: 10px; border: solid 3px rgba(54, 162, 235, 1);">
-          <div class="lineChart" style="height: 400px">
-            <canvas id="temperatureChart"></canvas>    
-          </div>
-        </div>
-      </div>
-
-      <!-- TODO: 임시 -->
-      <%
-        // 기상청 API를 통해 현재 시간대의 기온 데이터를 가져온다고 가정
-        // 실제로는 해당 API에 맞게 요청 및 응답 처리 필요
-        double[] temperatureData = {20, 22, 23, 24, 25, 26, 24, 22, 21, 20, 22, 23, 24, 25, 26, 24, 22, 21,
-            20, 22, 23, 24, 25, 26, 24, 22, 21, 20, 22, 23, 24, 25, 26, 24, 22, 21}; // 예시 기온 데이터
-        double[] timeLabels = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 00, 01, 02,
-            03, 04, 05, 06, 07, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}; // 예시 시간 라벨
-        
-        String temperatureDataJson = Arrays.toString(temperatureData);
-        String timeLabelsJson = Arrays.toString(timeLabels);
-      %>
-      
-      <script>
-        var ctx = document.getElementById('temperatureChart').getContext('2d');
-        var temperatureData = <%= temperatureDataJson %>;
-        var timeLabels = <%= timeLabelsJson %>;
-
-        //config
-        const config = {
-                type: 'line',
-                data: {
-                    labels: timeLabels,
-                    datasets: [{
-                        label: 'Temperature (°C)',
-                        data: temperatureData,
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                    	x: {
-                    		grid: {
-                    			color: 'transparent',
-                    		},
-                    	},
-                        y: {
-                        	grid: {
-                        		color: 'transparent',
-                        	},
-                        	beginAtZero:true,
-                        }
-                    }
-                }
-            }
-        
-        const myChart = new Chart(ctx, config);
-        
-        //x-scroll
-        const lineChart = document.querySelector('.lineChart');
-        const totalLabels = myChart.data.labels.length;
-        if (totalLabels > 12) {
-        	lineChart.style.width = '800px'
-          //const newWith = 800 + ((totalLabels - 12) * 30);
-       	  //lineChart.style.width = `${newWidth}px`;
-        }
-    	</script>
-
-
-      <!-- TODO: DB로부터 가져온 기온, 풍속 등 데이터 테이블 형태로 표시 -->
-      
-      <table>
-      <!-- 표 본문글 -->
-      <tbody>
-        <!-- 시간별로 반복 -->
-        <!-- 날짜 -->
- 		    <!-- <c:forEach var="date" begin="0" end="23" step="1"> -->
-		    <!-- 시간 -->
-        <!-- <c:forEach var="hour" begin="0" end="23" step="1">
-          <c:set var="formattedHour" value="${hour < 10 ? '0' + hour : hour}" /> -->
-          <tr>
-            <!-- <td>${hour}시</td> -->
-              <!-- 각 카테고리의 값 출력 -->
-              <!-- <c:forEach var="item" items="${searchweather}"> -->
-              <!-- 현재 시간과 카테고리가 일치할 때만 값을 표시 -->
-                <!-- <c:if test="${item.fcstTime == formattedHour}">
-                  <c:choose>
-                    <c:when test="${item.category eq 'TMP'}">
-                      <td>${item.fcstValue}</td>
-                    </c:when>
-                    <c:when test="${item.category eq 'VEC'}">
-                      <td>${item.fcstValue}</td>
-                    </c:when>
-                    <c:when test="${item.category eq 'PCP'}">
-                      <td>${item.fcstValue}</td>
-                    </c:when>
-                  </c:choose>
-                </c:if>
-              </c:forEach>
-          </tr>
-        </c:forEach>
-        </c:forEach> -->
-        </tbody>              
-      </table>
->>>>>>> 36a5f7ef25ef0e5498a60071d1c322f9de694a97:SolDeskTeamProject_0.0.2/src/main/webapp/WEB-INF/views/Weather/ShortWeather.jsp
     </div> 
     <!-- 왼쪽 구역4 -->
     <div class="content_left_4">
@@ -342,33 +266,7 @@
     </div>
     <!-- 왼쪽 구역5 -->
     <div class="content_left_5">
-    <!-- 현재 시간 정보 (서울) 메인에 박아둘 정보 -->	
-		<c:forEach var="value" items="${nowWeather}" varStatus="loop">
-		    <c:if test="${loop.index == 0}">
-		        현재 기온 : ${value}
-		    </c:if>
-		    <c:if test="${loop.index == 1}">
-		        현재 풍속(동서) : ${value}
-		    </c:if>
-		    <c:if test="${loop.index == 2}">
-		        현재 풍속(남북) : ${value}
-		    </c:if>
-		    <c:if test="${loop.index == 3}">
-		        현재 풍향 : ${value}
-		    </c:if>
-		    <c:if test="${loop.index == 4}">
-		        현재 상태 : ${value}
-		    </c:if>
-		    <c:if test="${loop.index == 5}">
-		        현재 강수확률 : ${value}
-		    </c:if>
-		    <c:if test="${loop.index == 6}">
-		        현재 강수량 : ${value}
-		    </c:if>
-		    <c:if test="${loop.index == 7}">
-		        현재 습도 : ${value}
-		    </c:if>
-		</c:forEach>
+    
     </div>
     <!-- 왼쪽 구역6 -->
     <div class="content_left_6">왼6</div>

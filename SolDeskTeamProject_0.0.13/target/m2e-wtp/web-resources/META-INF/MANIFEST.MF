@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Built-By: fungr
-Build-Jdk: 17.0.4.1
+Built-By: ￬ﾖﾑ￬ﾖﾑ
+Build-Jdk: 11.0.21
 Created-By: Maven Integration for Eclipse
 
