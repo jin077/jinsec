@@ -31,11 +31,65 @@
 <!-- chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<script type="text/javascript">
+$(document).ready(function(){ 
+    var serviceKey = "fpqEuKWzMPUU0PhKfNijGVZnZjweMezdxekVC6Y71Yb3Ki1h1WzMmnLZnqDioAGcwkbtEcRBa36OJrG6TABKHg%3D%3D"; // 서비스 키
+    var apiUrl = "http://apis.data.go.kr/1360000/SatlitImgInfoService/getInsightSatlit";
+    
+    var currentDate = new Date();
+    var currentTime = currentDate.toISOString().slice(0, 10).replace(/-/g, ''); // YYYYMMDD 형식으로 변환
+    
+    // Ajax 요청 설정
+    $.ajax({
+        url: apiUrl + "?serviceKey=" + serviceKey + "&numOfRows=10&pageNo=1&dataType=json&sat=g2&data=ir105&area=ko&time=" + currentTime,
+        type: "GET",
+        dataType: "json",
+        success: function(response) { 
+            // 이미지를 담은 배열 추출
+            var imageUrls = response.response.body.items.item[0]['satImgC-file'].split(', ');
+            
+            // 이미지를 표시할 div 요소
+            var $satelliteDiv = $('#satellight');
+            var currentIndex = 0; // 현재 이미지 인덱스
+            
+            // 첫 번째 이미지 표시
+            var $img = $('<img>').attr('src', imageUrls[currentIndex].trim());
+            $satelliteDiv.empty().append($img);
+            
+            // 일정 시간마다 다음 이미지로 전환하는 타이머 설정
+            setInterval(function() {
+                currentIndex = (currentIndex + 1) % imageUrls.length; // 다음 이미지 인덱스 계산
+                $img.attr('src', imageUrls[currentIndex].trim()); // 다음 이미지 표시
+            }, 1000); // 1초마다 이미지 변경
+        },
+        error: function(xhr, status, error) {
+            // 오류 발생 시 처리할 코드
+            console.error("Error:", error);
+        }
+    });
+});
+</script>
+
+
+
 </head>
 
 <body>
+<div class="short-weather">
 <!-- 위쪽 헤더 -->
-<jsp:include page="../include/header.jsp"/>
+<div class="short-top-line">
+			<div class="short-top-icon-line">
+				<div class="short-top-icon" id="shortTopIconImg"></div>
+				<div class="short-top-icon" id="shortTopIconWord">기상정보공유사이트</div>
+			</div>
+			<div class="dust-top-menu-line">
+				<!-- 좌측부터 1번으로 시작함 -->
+				<c:forEach var="i" begin="0" end="2">
+					<div class="short-top-menu-word" id="shortTopMenuWord${i}"></div>
+				</c:forEach>
+			</div>
+			<!-- 이곳에 메인 메뉴 배너의 내용을 넣어주세요 -->
+		</div>
 <!-- 안쪽 헤더 -->
 <div class="inner_header">
   <!-- 메인 로고 -->
@@ -84,9 +138,9 @@
 <!-- 내용 -->
 <div class="main">
   <!-- 왼쪽 구역 -->
-  <div class="content_left">
+  <div class="content-left">
     <!-- 왼쪽 구역1 -->
-    <div class="content_left_1">
+    <div class="content-left-1">
       <button>기상정보</button>
       <select>
         <option value="">지역선택</option>
@@ -102,50 +156,84 @@
       >
       <path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg>
 	 </div>
-	 <div class="content-left-1.5">
-	<div id="content-left-1.5-left">
-		<!-- 현재 시간 정보 (서울) 메인에 박아둘 정보 -->	
-		<c:forEach var="value" items="${nowWeather}" varStatus="loop">
-		    <c:if test="${loop.index == 0}">
-		        ${value}°
-		    </c:if>
-		    <c:if test="${loop.index == 4}">
-		        ${value}
-		    </c:if>
-		</c:forEach>
-	</div>   
-    <div id="content-left-1-right">
-    	<div>
-    	<c:forEach var="value" items="${nowWeather}" varStatus="loop">
-		    <c:if test="${loop.index == 1}">
-		       현재 풍속(동서) ${value}
-		    </c:if>
-		    <c:if test="${loop.index == 2}">
-		       현재 풍속(남북) ${value}
-		    </c:if>
-		    <c:if test="${loop.index == 3}">
-		       현재 풍향 ${value}
-		    </c:if>
-		</c:forEach>
+	
+	<!-- 왼쪽 구역2 -->
+	<div class="content-left-2">
+		<div class="content-left-2-left">
+			<!-- 현재 시간 정보 (서울) 메인에 박아둘 정보 -->	
+			<c:forEach var="item" items="${searchNowWeather}">
+				       	   <c:if test="${item.category eq 'TMP'}">
+					           ${item.fcstValue}°
+					       </c:if>
+					       <c:if test="${item.category eq 'SKY'}">
+					          ${item.fcstValue}
+					       </c:if>
+				       </c:forEach>
+			<c:forEach var="value" items="${nowWeather}" varStatus="loop">
+			    <c:if test="${loop.index == 0}">
+			        ${value}°
+			    </c:if>
+			    <c:if test="${loop.index == 4}">
+			        ${value}
+			    </c:if>
+			</c:forEach>
+		</div>   
+    	<div class="content-left-2-right">
+    		<!-- 오른쪽 첫번쨰 -->
+	    	<div class="content-left-2-right-1">
+	    	<c:forEach var="item" items="${searchNowWeather}">
+				       	   <c:if test="${item.category eq 'UUU'}">
+					           현재 풍속(동서) ${item.fcstValue}
+					       </c:if>
+					       <c:if test="${item.category eq 'VVV'}">
+					          현재 풍속(남북) ${item.fcstValue}
+					       </c:if>
+					       <c:if test="${item.category eq 'VEC'}">
+					          현재 풍향 ${item.fcstValue}
+					       </c:if>
+				       </c:forEach>
+	    	<c:forEach var="value" items="${nowWeather}" varStatus="loop">
+			    <c:if test="${loop.index == 1}">
+			       현재 풍속(동서) ${value}
+			    </c:if>
+			    <c:if test="${loop.index == 2}">
+			       현재 풍속(남북) ${value}
+			    </c:if>
+			    <c:if test="${loop.index == 3}">
+			       현재 풍향 ${value}
+			    </c:if>
+			</c:forEach>
+	    	</div>
+	    	<!-- 오른쪽 두번쨰 -->
+	    	<div class="content-left-2-right-2">
+	    	<c:forEach var="item" items="${searchNowWeather}">
+				       	   <c:if test="${item.category eq 'POP'}">
+					          강수 확률  ${item.fcstValue}%
+					       </c:if>
+					       <c:if test="${item.category eq 'PCP'}">
+					          강수량 ${item.fcstValue}
+					       </c:if>
+					       <c:if test="${item.category eq 'REH'}">
+					          습도 ${item.fcstValue}%
+					       </c:if>
+				       </c:forEach>
+	    	<c:forEach var="value" items="${nowWeather}" varStatus="loop">
+			    <c:if test="${loop.index == 5}">
+			       강수 확률 ${value}%
+			    </c:if>
+				<c:if test="${loop.index == 6}">
+			       강수량 ${value}
+			    </c:if>		
+				<c:if test="${loop.index == 7}">
+			       습도 ${value}%
+			    </c:if>
+			</c:forEach>
+    		</div>
     	</div>
-    	
-    	<div>
-    	<c:forEach var="value" items="${nowWeather}" varStatus="loop">
-		    <c:if test="${loop.index == 5}">
-		       강수 확률 ${value}%
-		    </c:if>
-			<c:if test="${loop.index == 6}">
-		       강수량 ${value}
-		    </c:if>		
-			<c:if test="${loop.index == 7}">
-		       습도 ${value}%
-		    </c:if>
-		</c:forEach>
     </div>
-    </div>
-    </div>
-    <!-- 왼쪽 구역2 -->
-    <div class="content_left_2">
+    
+    <!-- 왼쪽 구역3 -->
+    <div class="content-left-3">
       <!-- api 데이터 삽입 -->
    		<form action="NewInsert" method="post">
    		<div class="frame">
@@ -153,8 +241,14 @@
    		</div>
      	</form>
     </div>
-    <!-- 왼쪽 구역3 -->
-    <div class="content_left_3">
+    
+    <!-- 왼쪽 구역4 -->
+    <div class="content-left-4">
+    	<c:forEach var="item" items="${searchNowWeather}">
+				       	   <c:if test="${item.category eq 'TMP'}">
+					           ${item.area}
+					       </c:if>
+				       	</c:forEach>
     	<form action="${cp}/Weather/searchWeather" method="post" class="home-serach-form">
 			<input type="text" value="지역을 검색하세요" id="area" name="area">
             <button type="submit" class="btn btn-primary" value="검색">검색</button>
@@ -224,10 +318,10 @@
 <!--         </tr>  -->
 <!--         </tbody>               -->
 <!--       </table> -->
-
     </div> 
-    <!-- 왼쪽 구역4 -->
-    <div class="content_left_4">
+    
+    <!-- 왼쪽 구역5 -->
+    <div class="content-left-5">
     	<table border="1" style="table-layout:fixed">
 	    	<thead>
 		    </thead>
@@ -264,20 +358,9 @@
 		    </tbody>
 		</table>
     </div>
-    <!-- 왼쪽 구역5 -->
-    <div class="content_left_5">
-    
-    </div>
-    <!-- 왼쪽 구역6 -->
-    <div class="content_left_6">왼6</div>
-            <div class="" style="width: 800px;">
-        	<div class="" style="width: 800px; max-width: 600px; overflow-x: scroll; border-radius: 10px; border: solid 3px rgba(54, 162, 235, 1);">
-		        <div class="lineChart" style="height: 400px">
-			        <canvas id="temperatureChart"></canvas>    
-		        </div>
-		    </div>
-        </div>
-        
+
+    <!-- 왼쪽 구역6 (임시코드) -->
+    <div class="content-left-6">왼6
         <%
         // 기상청 API를 통해 현재 시간대의 기온 데이터를 가져온다고 가정
         // 실제로는 해당 API에 맞게 요청 및 응답 처리 필요
@@ -337,8 +420,8 @@
 //         	lineChart.style.width = `${newWidth}px`;
         }
     	</script>
+  	</div>
   </div>
-
   <!-- 오른쪽 구역 -->
   <div class="content_right">
     <!-- 오른쪽 구역1 -->
@@ -348,7 +431,11 @@
        </c:forEach>
     </div>
     <!-- 오른쪽 구역2 -->
-    <div class="content_right_2">오2</div>
+    <div class="content_right_2">
+    <div id="satellight">
+        <!-- 이미지가 여기에 표시될 것입니다. -->
+    </div>
+    </div>
     <!-- 오른쪽 구역3 -->
     <div class="content_right_3">오3</div>
     <!-- 오른쪽 구역4 -->
@@ -356,6 +443,7 @@
     <!-- 오른쪽 구역5 -->
     <div class="content_right_5">오5</div>
   </div>
+</div>
 </div>
 </body>
 </html>

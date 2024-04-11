@@ -251,6 +251,8 @@ public class ShortService {
 		List<String> categories = Arrays.asList("TMP", "UUU", "VVV", "VEC", "SKY", "POP", "PCP", "REH");
 		
 		String fcstTime = work.nowTimes();
+		String currentDate = work.nowDates();
+		String fcstDate = String.format("%08d", Integer.parseInt(currentDate)); // 여덟 자리로 포맷팅
 		
 		//현재 날짜 정보 불러오기 
 		for (String category : categories) {
@@ -258,10 +260,22 @@ public class ShortService {
 			map.put("area", area);
 			map.put("category", category);
 			map.put("fcstTime", fcstTime);
-//		        map.put("fcstTime", fcstTime); // fcstTime 변수가 어디서 오는지 확인 필요
+			map.put("fcstDate", fcstDate);
+			//		        map.put("fcstTime", fcstTime); // fcstTime 변수가 어디서 오는지 확인 필요
 			
 			// weatherMapper.searchWeather(area, category)를 호출하여 결과를 받아온다고 가정하고, resultList에 추가
 			List<Item> list = weatherMapper.searchNowWeather(map);
+			
+			if (category.equals("SKY")) {
+	            for (Item item : list) {
+	                String fcstValue = item.getFcstValue();
+	                int skyValue = Integer.parseInt(fcstValue);
+	                if (skyValue >= 0 && skyValue <= 5) {
+	                    item.setFcstValue("맑음");
+	                }
+	            }
+	        }
+			
 			resultList.addAll(list);
 			
 //		        System.out.println("확인하기 : " +list);

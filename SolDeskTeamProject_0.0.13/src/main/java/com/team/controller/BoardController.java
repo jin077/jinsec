@@ -94,12 +94,32 @@ public class BoardController {
     }
     
   //단기 컨트롤러 & 현재 데이터 불러오기 (완성)
-  	@GetMapping("/ShortWeather")
-  	public void Short(Model model) {
+//  	@GetMapping("/ShortWeather")
+//  	public void Short(Model model) {
+//  		System.out.println("실기간 테스트");
+//  		model.addAttribute("nowWeather",shortService.nowWeatherList());
+//  	}
+  	//중기랑 연결중 TEST
+	@GetMapping("/ShortWeather")
+  	public void Short(@RequestParam(value = "area", defaultValue = "") String area, Model model,
+			HttpServletRequest request) {
+		if (area.isEmpty()) {
+			area = "서울";
+		}
+		request.setAttribute("morningWeatherMap", mediumService.morningWeatherMap());
+		request.setAttribute("nightWeatherMap", mediumService.nightWeatherMap());
+		model.addAttribute("temper", mediumService.mediumTempRun(area));
+		model.addAttribute("weather", mediumService.mediumWeatherRun(area));
+		model.addAttribute("forecast", mediumService.mediumForecastRun(area));
+		model.addAttribute("MediumData", mediumService.getDates());
+		model.addAttribute("Area", area);
+		model.addAttribute("error", mediumService.mediumWeatherArea(area));
+		model.addAttribute("areaBox", mediumService.areaBox());
   		System.out.println("실기간 테스트");
   		model.addAttribute("nowWeather",shortService.nowWeatherList());
-//  		System.out.println("지금 2 : " + shortService.nowWeatherList());
   	}
+  	
+  	
   	//단기 검색어 & 현재 시간데이터들을 가져오기 
   	@PostMapping("/searchWeather")
   	public String searchWeather(@RequestParam("area") String area, Model model) {
@@ -111,7 +131,8 @@ public class BoardController {
   		model.addAttribute("searchPcpWeather", shortService.searchPcpWeather(area));
   		model.addAttribute("searchPopWeather", shortService.searchPopWeather(area));
   		model.addAttribute("searchSkyWeather", shortService.searchSkyWeather(area));
-//  		System.out.println(shortService.searchNowWeather(area));
+  		model.addAttribute("searchNowWeather", shortService.searchNowWeather(area));
+  		System.out.println("확인하기 : " +shortService.searchNowWeather(area));
   		return "Weather/ShortWeather";
   	}
   	//단기 삽입 (완성)
