@@ -25,7 +25,11 @@
 /* 본문 부분 */
 
 .main {
+<<<<<<< HEAD:SolDeskTeamProject_0.0.13/src/main/webapp/resources/ShortWeather.css
 /*     background: gray; */
+=======
+    /* background: gray; */
+>>>>>>> 36a5f7ef25ef0e5498a60071d1c322f9de694a97:SolDeskTeamProject_0.0.2/src/main/webapp/resources/ShortWeather.css
     margin: auto;
     display: grid;
     width: 99%;
@@ -36,7 +40,11 @@
     /* align-items:center; */
 }
 .content_left {
+<<<<<<< HEAD:SolDeskTeamProject_0.0.13/src/main/webapp/resources/ShortWeather.css
 /*     background: yellow; */
+=======
+    /* background: yellow; */
+>>>>>>> 36a5f7ef25ef0e5498a60071d1c322f9de694a97:SolDeskTeamProject_0.0.2/src/main/webapp/resources/ShortWeather.css
     width: 100%;
     font-size: 40px;
 }
@@ -61,7 +69,11 @@
 .content_left_3 {
     text-align: center;
     margin: 10px;
+<<<<<<< HEAD:SolDeskTeamProject_0.0.13/src/main/webapp/resources/ShortWeather.css
 /*     background: green; */
+=======
+    /* background: green; */
+>>>>>>> 36a5f7ef25ef0e5498a60071d1c322f9de694a97:SolDeskTeamProject_0.0.2/src/main/webapp/resources/ShortWeather.css
     min-height: 200px;
     border-bottom: 1px solid #d8d8d8;
 }
@@ -125,8 +137,16 @@
 
 
 .line_chart {
-    overflow-x: scroll;
+	width: 90%;
+	height: 400px;
+	text-align: center;
+	overflow: auto;
+	/* -ms-overflow-style: none; 인터넷 익스플로러 */
+	/* scrollbar-width: none; 파이어폭스 */
 }
+/* .line_chart::-webkit-scrollbar {
+    display: none; 크롬, 사파리, 오페라, 엣지
+} */
 
 ul {list-style: none;display: flex;}
 li {padding: 20px}

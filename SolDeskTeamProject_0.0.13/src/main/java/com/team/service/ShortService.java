@@ -157,13 +157,18 @@ public class ShortService {
 	public List<String> nowWeatherList(){
 	      Map<String, Object> map = new LinkedHashMap<String, Object>();
 	      String area="서울";
+<<<<<<< HEAD:SolDeskTeamProject_0.0.13/src/main/java/com/team/service/ShortService.java
 	      String fcstDate = work.nowDateShortToday();
 	       String fcstTime = work.nowTimes();
+=======
+	      String fcstDate = time.nowDate();
+	      String fcstTime = time.nowTimes();
+>>>>>>> 36a5f7ef25ef0e5498a60071d1c322f9de694a97:SolDeskTeamProject_0.0.2/src/main/java/com/team/service/WeatherShortService.java
 	      map.put("area", area);
 	      map.put("fcstDate", fcstDate);
 	      map.put("fcstTime", fcstTime);
-	      
-	       List<Item> list = weatherMapper.nowWeatherList(map);
+
+		  List<Item> list = weatherMapper.nowWeatherList(map);
 //	       System.out.println("확인 :" + list);
 	       List<String> categoryList = list.stream()
 	    		    .filter(item -> {
