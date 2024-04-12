@@ -125,7 +125,7 @@ public class BoardController {
   	public String searchWeather(@RequestParam("area") String area, Model model) {
   		System.out.println("검색어 불러오기");
   		model.addAttribute("searchweather", shortService.searchWeather(area));
-  		model.addAttribute("searchTomorrowWeather", shortService.searchTomorrowWeather(area));
+//  		model.addAttribute("searchTomorrowWeather", shortService.searchTomorrowWeather(area));
   		model.addAttribute("searchTmpWeather", shortService.searchTmpWeather(area));
   		model.addAttribute("searchRehWeather", shortService.searchRehWeather(area));
   		model.addAttribute("searchPcpWeather", shortService.searchPcpWeather(area));
@@ -133,6 +133,7 @@ public class BoardController {
   		model.addAttribute("searchSkyWeather", shortService.searchSkyWeather(area));
   		model.addAttribute("searchNowWeather", shortService.searchNowWeather(area));
   		System.out.println("확인하기 : " +shortService.searchNowWeather(area));
+  		System.out.println("온도 확인 : " +shortService.searchTmpWeather(area));
   		return "Weather/ShortWeather";
   	}
   	//단기 삽입 (완성)

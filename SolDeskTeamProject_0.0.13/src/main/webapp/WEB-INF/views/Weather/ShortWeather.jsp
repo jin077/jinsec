@@ -25,9 +25,6 @@
 <!-- shortWeather css -->
 <link href="${cp}/resources/ShortWeather.css" rel="stylesheet" type="text/css" />
 
-<!-- shortWeather css -->
-<link href="${cp}/resources/ShortWeather.css" rel="stylesheet" type="text/css" />
-
 <!-- chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -148,27 +145,56 @@ $(document).ready(function(){
         <option value="">인천</option>
         <option value="">부산</option>
       </select>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 512 512"
-      >
-      <path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg>
-	 </div>
+    </div>
+    <!-- 왼쪽 구역 검색부분(1과 2사이) -->
+    <div class="content-search">
+    	
+    	<c:forEach var="item" items="${searchNowWeather}">
+       	   <c:if test="${item.category eq 'TMP'}">
+	           ${item.area}
+	       </c:if>
+       	</c:forEach>
+       	
+       	<!-- 검색 부분 -->
+       	<div class="search">
+    	<form action="${cp}/Weather/searchWeather" method="post">
+			<input type="text" placeholder="지역을 검색하세요" onfocus="placeholder=''" onblur="placeholder='지역을 검색하세요'" id="area" name="area">
+            <button type="submit" class="btn-gradient blue small" value="검색">검색</button>
+        </form>
+        </div>
+        
+        <!-- 새로고침 부분(api 데이터 삽입) -->
+        <div class="refresh">
+   		<form action="NewInsert" method="post">
+   			<button type="submit" class="btn-gradient yellow mini">새로고침</button>		
+     	</form>
+     	</div>
+        
+    </div>
 	
 	<!-- 왼쪽 구역2 -->
 	<div class="content-left-2">
 		<div class="content-left-2-left">
 			<!-- 현재 시간 정보 (서울) 메인에 박아둘 정보 -->	
 			<c:forEach var="item" items="${searchNowWeather}">
-				       	   <c:if test="${item.category eq 'TMP'}">
-					           ${item.fcstValue}°
-					       </c:if>
-					       <c:if test="${item.category eq 'SKY'}">
-					          ${item.fcstValue}
-					       </c:if>
-				       </c:forEach>
+				<div class="temperature">
+					<c:if test="${item.category eq 'TMP'}">
+				       ${item.fcstValue}°
+			       	</c:if>
+				</div>
+				<div class="state">
+					<c:if test="${item.category eq 'SKY'}">
+				          ${item.fcstValue}
+			        
+			        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+					fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+					stroke-linejoin="round" class="feather feather-moon">
+					<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+					</svg>
+			        </c:if>	        
+				</div>
+			</c:forEach>
+			
 			<c:forEach var="value" items="${nowWeather}" varStatus="loop">
 			    <c:if test="${loop.index == 0}">
 			        ${value}°
@@ -191,7 +217,8 @@ $(document).ready(function(){
 					       <c:if test="${item.category eq 'VEC'}">
 					          현재 풍향 ${item.fcstValue}
 					       </c:if>
-				       </c:forEach>
+			</c:forEach>
+				       
 	    	<c:forEach var="value" items="${nowWeather}" varStatus="loop">
 			    <c:if test="${loop.index == 1}">
 			       현재 풍속(동서) ${value}
@@ -234,25 +261,7 @@ $(document).ready(function(){
     
     <!-- 왼쪽 구역3 -->
     <div class="content-left-3">
-      <!-- api 데이터 삽입 -->
-   		<form action="NewInsert" method="post">
-   		<div class="frame">
-   			<button type="submit" class="custom-btn btn-8"><span>New</span></button>
-   		</div>
-     	</form>
-    </div>
-    
-    <!-- 왼쪽 구역4 -->
-    <div class="content-left-4">
-    	<c:forEach var="item" items="${searchNowWeather}">
-				       	   <c:if test="${item.category eq 'TMP'}">
-					           ${item.area}
-					       </c:if>
-				       	</c:forEach>
-    	<form action="${cp}/Weather/searchWeather" method="post" class="home-serach-form">
-			<input type="text" value="지역을 검색하세요" id="area" name="area">
-            <button type="submit" class="btn btn-primary" value="검색">검색</button>
-        </form>
+    	
         
         <div class="" style="width: 800px;">
         	<div class="" style="width: 800px; max-width: 600px; overflow-x: scroll; border-radius: 10px; border: solid 3px rgba(54, 162, 235, 1);">
@@ -271,6 +280,34 @@ $(document).ready(function(){
 			
 			</div>
         </div>
+        <c:forEach var="item" items="${searchTomorrowWeather}"> 
+       	 	<c:if test="${item.category eq 'TMP'}"> 
+		           온도 ${item.fcstValue} 
+	        </c:if> 
+	       	 </c:forEach> 
+<table border="1">
+	<c:forEach items="${searchTmpWeather}" var="item"> 
+		<tr>
+			<td>${item.fcstValue}</td>
+		</tr>
+	</c:forEach>
+	<c:forEach items="${searchPopWeather}" var="item"> 
+		<tr>
+			<td>${item.fcstValue}</td>
+		</tr>
+	</c:forEach>
+	<c:forEach items="${searchPcpWeather}" var="item"> 
+		<tr>
+			<td>${item.fcstValue}</td>
+		</tr>
+	</c:forEach>
+	<c:forEach items="${searchSkyWeather}" var="item"> 
+		<tr>
+			<td>${item.fcstValue}</td>
+		</tr>
+	</c:forEach>
+</table>
+
 <!--        <table> -->
 <!--         표 본문글 -->
 <!--         <tbody> -->
@@ -320,8 +357,8 @@ $(document).ready(function(){
 <!--       </table> -->
     </div> 
     
-    <!-- 왼쪽 구역5 -->
-    <div class="content-left-5">
+    <!-- 왼쪽 구역4 -->
+    <div class="content-left-4">
     	<table border="1" style="table-layout:fixed">
 	    	<thead>
 		    </thead>
@@ -359,8 +396,8 @@ $(document).ready(function(){
 		</table>
     </div>
 
-    <!-- 왼쪽 구역6 (임시코드) -->
-    <div class="content-left-6">왼6
+    <!-- 왼쪽 구역5 (임시코드) -->
+    <div class="content-left-5">왼5
         <%
         // 기상청 API를 통해 현재 시간대의 기온 데이터를 가져온다고 가정
         // 실제로는 해당 API에 맞게 요청 및 응답 처리 필요

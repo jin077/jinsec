@@ -287,30 +287,33 @@ public class ShortService {
 	
 	//온도 
 	public List<Item> searchTmpWeather(String area){
-		List<Item> resultList = new ArrayList<>();
-		
-		String currentTime = work.nowTimes();
-		String currentDate = work.nowDates();
-		String fcstDate = String.format("%08d", Integer.parseInt(currentDate)); // 여덟 자리로 포맷팅
-		
-		for (int i = 0; i < 24; i++) {
-			String targetTime = String.valueOf(Integer.parseInt(currentTime) + (i * 100)); // 현재 시간에서 i시간 뒤의 시간을 구함
-			targetTime = String.format("%04d", Integer.parseInt(targetTime)); // 네 자리로 포맷팅
-			
-			Map<String, Object> map = new LinkedHashMap<String, Object>();
-			map.put("area", area);
-			map.put("category", "TMP");
-			map.put("fcstTime", targetTime); // fcstTime 변수가 어디서 오는지 확인 필요
-			map.put("fcstDate", fcstDate);
-			
-			// weatherMapper.searchWeather(area, category)를 호출하여 결과를 받아온다고 가정하고, resultList에 추가
-			List<Item> list = weatherMapper.searchWeather(map);
-			resultList.addAll(list);
-		}
-		System.out.println("확인하기ㅋ :" + resultList);
-		return resultList;
+	    List<Item> resultList = new ArrayList<>();
+	    
+	    String currentTime = work.nowTimes();
+	    String currentDate = work.nowDates();
+	    String fcstDate = String.format("%08d", Integer.parseInt(currentDate)); // 여덟 자리로 포맷팅
+	    
+	    for (int i = 0; i < 48; i++) { // 24시간이 아니라 48로 변경
+	        String targetTime = String.valueOf(Integer.parseInt(currentTime) + (i * 100)); // 현재 시간에서 i시간 뒤의 시간을 구함
+	        targetTime = String.format("%04d", Integer.parseInt(targetTime)); // 네 자리로 포맷팅
+	        if (Integer.parseInt(targetTime) >= 2400) { // 현재 시간이 24시를 넘어가면
+	            currentTime = "0000"; // 시간을 0시로 설정
+	            currentDate = work.tomorrowDate(); // 날짜를 다음 날로 설정
+	            fcstDate = String.format("%08d", Integer.parseInt(currentDate)); // 다음 날로 설정된 날짜로 fcstDate 갱신
+	        }
+	        Map<String, Object> map = new LinkedHashMap<String, Object>();
+	        map.put("area", area);
+	        map.put("category", "TMP");
+	        map.put("fcstTime", targetTime);
+	        map.put("fcstDate", fcstDate);
+	        
+	        // weatherMapper.searchWeather(area, category)를 호출하여 결과를 받아온다고 가정하고, resultList에 추가
+	        List<Item> list = weatherMapper.searchWeather(map);
+	        resultList.addAll(list);
+	    }
+//	    System.out.println("확인하기ㅋ :" + resultList);
+	    return resultList;
 	}
-
 	//습도 
 		public List<Item> searchRehWeather(String area){
 			List<Item> resultList = new ArrayList<>();
@@ -333,7 +336,7 @@ public class ShortService {
 				List<Item> list = weatherMapper.searchWeather(map);
 				resultList.addAll(list);
 			}
-			System.out.println("확인하기ㅋ :" + resultList);
+//			System.out.println("확인하기ㅋ :" + resultList);
 			return resultList;
 		}
 	
@@ -359,7 +362,7 @@ public class ShortService {
 				List<Item> list = weatherMapper.searchWeather(map);
 				resultList.addAll(list);
 			}
-			System.out.println("확인하기ㅋ :" + resultList);
+//			System.out.println("확인하기ㅋ :" + resultList);
 			return resultList;
 		}
 	
@@ -385,7 +388,7 @@ public class ShortService {
 				List<Item> list = weatherMapper.searchWeather(map);
 				resultList.addAll(list);
 			}
-			System.out.println("확인하기ㅋ :" + resultList);
+//			System.out.println("확인하기ㅋ :" + resultList);
 			return resultList;
 		}
 	
